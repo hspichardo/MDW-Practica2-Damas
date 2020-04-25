@@ -33,8 +33,8 @@ public class Game {
 	}
 
 	public Error move(Coordinate... coordinates) {
-		Error error = null;
-		List<Coordinate> removedCoordinates = new ArrayList<Coordinate>();
+		Error error;
+		List<Coordinate> removedCoordinates = new ArrayList<>();
         int pair = 0;
 		do {
 			error = this.isCorrectPairMove(pair, coordinates);
@@ -86,8 +86,7 @@ public class Game {
         else {
             for(Coordinate coordinateDestination: diagonalCoordinates){
                 if(this.board.getPiece(coordinateDestination) == null) {
-                    Coordinate[] coordinates = {coordinate, coordinateDestination};
-                    Coordinate betweenPiece = this.getBetweenDiagonalPiece(0,coordinates);
+                    Coordinate betweenPiece = this.getBetweenDiagonalPiece(0, new Coordinate[]{coordinate, coordinateDestination});
                     if(betweenPiece!=null && this.board.getPiece(betweenPiece)!=null)
                         if(this.turn.getColor() != this.board.getColor(betweenPiece) ) return true;
                 }

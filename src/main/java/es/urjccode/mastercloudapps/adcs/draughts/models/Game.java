@@ -60,15 +60,14 @@ public class Game {
 		return error;
 	}
 	private void removePiecesOfBoardIfIsPossibleEatEnemyInTurn(){
-        List<Coordinate> coordinatesToRemove = new ArrayList<Coordinate>();
+        List<Coordinate> coordinatesToRemove;
         coordinatesToRemove = this.isPossibleEatEnemyinTurn();
         if(!coordinatesToRemove.isEmpty()) {
             this.board.remove(coordinatesToRemove.get((int) Math.random() * coordinatesToRemove.size()));
         }
     }
     private List<Coordinate> isPossibleEatEnemyinTurn(){
-        int cont = 0;
-        List<Coordinate> coordinatesToRemove = new ArrayList<Coordinate>();
+        List<Coordinate> coordinatesToRemove = new ArrayList<>();
         for (int i = 0; i < Coordinate.getDimension(); i++)
             for (int j = 0; j < Coordinate.getDimension(); j++)
                 if(this.turn.getColor() == this.board.getColor(new Coordinate(i,j)))

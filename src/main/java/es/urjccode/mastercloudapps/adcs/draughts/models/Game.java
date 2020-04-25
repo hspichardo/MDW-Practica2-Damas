@@ -43,6 +43,16 @@ public class Game {
 				pair++;
 			}
 		} while (pair < coordinates.length - 1 && error == null);
+        removeRamdonPieceOfBoardThatCanEatEnemyIfPlayerDont(error, coordinates);
+        error = this.isCorrectGlobalMove(error, removedCoordinates, coordinates);
+		if (error == null)
+			this.turn.change();
+		else
+			this.unMovesUntilPair(removedCoordinates, pair, coordinates);
+		return error;
+	}
+
+    private void removeRamdonPieceOfBoardThatCanEatEnemyIfPlayerDont(Error error, Coordinate[] coordinates) {
         if(coordinates.length == 3 && error == null){
            this.removePiecesOfBoardIfIsPossibleEatEnemyInTurn();
         }
@@ -52,14 +62,9 @@ public class Game {
             this.removePiecesOfBoardIfIsPossibleEatEnemyInTurn();
 
         }
-        error = this.isCorrectGlobalMove(error, removedCoordinates, coordinates);
-		if (error == null)
-			this.turn.change();
-		else
-			this.unMovesUntilPair(removedCoordinates, pair, coordinates);
-		return error;
-	}
-	private void removePiecesOfBoardIfIsPossibleEatEnemyInTurn(){
+    }
+
+    private void removePiecesOfBoardIfIsPossibleEatEnemyInTurn(){
         List<Coordinate> coordinatesToRemove;
         coordinatesToRemove = this.isPossibleEatEnemyinTurn();
         if(!coordinatesToRemove.isEmpty()) {

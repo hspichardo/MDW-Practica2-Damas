@@ -35,7 +35,8 @@ public class Game {
 	public Error move(Coordinate... coordinates) {
 		Error error = null;
 		List<Coordinate> removedCoordinates = new ArrayList<Coordinate>();
-		int pair = 0;
+        List<Coordinate> coordinatesToRemove = new ArrayList<Coordinate>();
+        int pair = 0;
 		do {
 			error = this.isCorrectPairMove(pair, coordinates);
 			if (error == null) {
@@ -43,13 +44,55 @@ public class Game {
 				pair++;
 			}
 		} while (pair < coordinates.length - 1 && error == null);
-		error = this.isCorrectGlobalMove(error, removedCoordinates, coordinates);
+        if(coordinates.length == 3 && error == null){
+            coordinatesToRemove = this.isPossibleEatEnemyinTurn();
+            if(!coordinatesToRemove.isEmpty()) {
+                this.board.remove(coordinatesToRemove.get((int) Math.random() * coordinatesToRemove.size()));
+            }
+        }
+        if(coordinates.length == 2 && error == null){
+            if(this.isPossibleEatingToDiagonals(coordinates[0]))
+                this.board.remove(coordinates[1]);
+            coordinatesToRemove = this.isPossibleEatEnemyinTurn();
+            if(!coordinatesToRemove.isEmpty()) {
+                this.board.remove(coordinatesToRemove.get((int) Math.random() * coordinatesToRemove.size()));
+            }
+
+        }
+
+        error = this.isCorrectGlobalMove(error, removedCoordinates, coordinates);
 		if (error == null)
 			this.turn.change();
 		else
 			this.unMovesUntilPair(removedCoordinates, pair, coordinates);
 		return error;
 	}
+    private List<Coordinate> isPossibleEatEnemyinTurn(){
+        int cont = 0;
+        List<Coordinate> coordinatesToRemove = new ArrayList<Coordinate>();
+        for (int i = 0; i < Coordinate.getDimension(); i++)
+            for (int j = 0; j < Coordinate.getDimension(); j++)
+                if(this.turn.getColor() == this.board.getColor(new Coordinate(i,j)))
+                    if(this.isPossibleEatingToDiagonals(new Coordinate(i,j))) coordinatesToRemove.add(new Coordinate(i,j));
+        return coordinatesToRemove;
+    }
+    private boolean isPossibleEatingToDiagonals(Coordinate coordinate) {
+        List<Coordinate> diagonalCoordinates = coordinate.getDiagonalDestinationCoordinates();
+        if(diagonalCoordinates.isEmpty()) return false;
+        else {
+            for(Coordinate coordinateDestination: diagonalCoordinates){
+                if(this.board.getPiece(coordinateDestination) == null) {
+                    Coordinate[] coordinates = {coordinate, coordinateDestination};
+                    Coordinate betweenPiece = this.getBetweenDiagonalPiece(0,coordinates);
+                    if(betweenPiece!=null && this.board.getPiece(betweenPiece)!=null)
+                        if(this.turn.getColor() != this.board.getColor(betweenPiece) ) return true;
+                }
+
+            }
+            return false;
+        }
+    }
+
 
 	private Error isCorrectPairMove(int pair, Coordinate... coordinates) {
 		assert coordinates[pair] != null;
@@ -60,7 +103,7 @@ public class Game {
 			return Error.OPPOSITE_PIECE;
 		if (!this.board.isEmpty(coordinates[pair + 1]))
 			return Error.NOT_EMPTY_TARGET;
-		List<Piece> betweenDiagonalPieces = 
+		List<Piece> betweenDiagonalPieces =
 			this.board.getBetweenDiagonalPieces(coordinates[pair], coordinates[pair + 1]);
 		return this.board.getPiece(coordinates[pair]).isCorrectMovement(betweenDiagonalPieces, pair, coordinates);
 	}

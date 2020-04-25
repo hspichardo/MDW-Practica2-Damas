@@ -47,8 +47,8 @@ public class Coordinate {
     Direction getDirection(Coordinate coordinate) {
         assert coordinate != null;
         Coordinate substract = coordinate.substract(this);
-        for (Direction direction : Direction.values()) 
-            if (direction.isOnDirection(substract)) 
+        for (Direction direction : Direction.values())
+            if (direction.isOnDirection(substract))
                 return direction;
         return null;
     }
@@ -88,6 +88,19 @@ public class Coordinate {
                 diagonalCoordinates.add(diagonalCoordinate);
         }
         return diagonalCoordinates;
+    }
+
+    public List<Coordinate> getDiagonalDestinationCoordinates(){
+        ArrayList<Coordinate> diagonalDestination = new ArrayList<Coordinate>();
+        if(this.row >= LOWER_LIMIT + 2 && this.column >= LOWER_LIMIT + 2)
+            diagonalDestination.add(new Coordinate(this.row-2, this.column-2)); // diagonal arriba izquierda
+        if(this.row >= LOWER_LIMIT + 2 && this.column <= UPPER_LIMIT - 2)
+            diagonalDestination.add(new Coordinate(this.row-2, this.column+2)); // diagonal arriba derecha
+        if(this.row <= UPPER_LIMIT - 2 && this.column >= LOWER_LIMIT + 2)
+            diagonalDestination.add(new Coordinate(this.row+2, this.column-2)); // diagonal  abajo izquierda
+        if(this.row <= UPPER_LIMIT - 2  && this.column <= UPPER_LIMIT - 2)
+            diagonalDestination.add(new Coordinate(this.row+2, this.column+2)); // diagonal abajo derecha
+        return diagonalDestination;
     }
 
     boolean isBlack() {

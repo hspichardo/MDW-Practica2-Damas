@@ -91,15 +91,15 @@ public class Coordinate {
     }
 
     public List<Coordinate> getDiagonalDestinationCoordinates(){
-        ArrayList<Coordinate> diagonalDestination = new ArrayList<Coordinate>();
+        ArrayList<Coordinate> diagonalDestination = new ArrayList<>();
         if(this.row >= LOWER_LIMIT + 2 && this.column >= LOWER_LIMIT + 2)
-            diagonalDestination.add(new Coordinate(this.row-2, this.column-2)); // diagonal arriba izquierda
+            diagonalDestination.add(new Coordinate(this.row-2, this.column-2));
         if(this.row >= LOWER_LIMIT + 2 && this.column <= UPPER_LIMIT - 2)
-            diagonalDestination.add(new Coordinate(this.row-2, this.column+2)); // diagonal arriba derecha
+            diagonalDestination.add(new Coordinate(this.row-2, this.column+2));
         if(this.row <= UPPER_LIMIT - 2 && this.column >= LOWER_LIMIT + 2)
-            diagonalDestination.add(new Coordinate(this.row+2, this.column-2)); // diagonal  abajo izquierda
+            diagonalDestination.add(new Coordinate(this.row+2, this.column-2));
         if(this.row <= UPPER_LIMIT - 2  && this.column <= UPPER_LIMIT - 2)
-            diagonalDestination.add(new Coordinate(this.row+2, this.column+2)); // diagonal abajo derecha
+            diagonalDestination.add(new Coordinate(this.row+2, this.column+2));
         return diagonalDestination;
     }
 

@@ -35,7 +35,6 @@ public class Game {
 	public Error move(Coordinate... coordinates) {
 		Error error = null;
 		List<Coordinate> removedCoordinates = new ArrayList<Coordinate>();
-        List<Coordinate> coordinatesToRemove = new ArrayList<Coordinate>();
         int pair = 0;
 		do {
 			error = this.isCorrectPairMove(pair, coordinates);
@@ -45,21 +44,14 @@ public class Game {
 			}
 		} while (pair < coordinates.length - 1 && error == null);
         if(coordinates.length == 3 && error == null){
-            coordinatesToRemove = this.isPossibleEatEnemyinTurn();
-            if(!coordinatesToRemove.isEmpty()) {
-                this.board.remove(coordinatesToRemove.get((int) Math.random() * coordinatesToRemove.size()));
-            }
+           this.removePiecesOfBoardIfIsPossibleEatEnemyInTurn();
         }
         if(coordinates.length == 2 && error == null){
             if(this.isPossibleEatingToDiagonals(coordinates[0]))
                 this.board.remove(coordinates[1]);
-            coordinatesToRemove = this.isPossibleEatEnemyinTurn();
-            if(!coordinatesToRemove.isEmpty()) {
-                this.board.remove(coordinatesToRemove.get((int) Math.random() * coordinatesToRemove.size()));
-            }
+            this.removePiecesOfBoardIfIsPossibleEatEnemyInTurn();
 
         }
-
         error = this.isCorrectGlobalMove(error, removedCoordinates, coordinates);
 		if (error == null)
 			this.turn.change();
@@ -67,6 +59,13 @@ public class Game {
 			this.unMovesUntilPair(removedCoordinates, pair, coordinates);
 		return error;
 	}
+	private void removePiecesOfBoardIfIsPossibleEatEnemyInTurn(){
+        List<Coordinate> coordinatesToRemove = new ArrayList<Coordinate>();
+        coordinatesToRemove = this.isPossibleEatEnemyinTurn();
+        if(!coordinatesToRemove.isEmpty()) {
+            this.board.remove(coordinatesToRemove.get((int) Math.random() * coordinatesToRemove.size()));
+        }
+    }
     private List<Coordinate> isPossibleEatEnemyinTurn(){
         int cont = 0;
         List<Coordinate> coordinatesToRemove = new ArrayList<Coordinate>();

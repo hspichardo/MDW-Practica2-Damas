@@ -68,10 +68,11 @@ public class Game {
     }
     private List<Coordinate> isPossibleEatEnemyinTurn(){
         List<Coordinate> coordinatesToRemove = new ArrayList<>();
-        for (int i = 0; i < Coordinate.getDimension(); i++)
-            for (int j = 0; j < Coordinate.getDimension(); j++)
-                if(this.turn.getColor() == this.board.getColor(new Coordinate(i,j)))
-                    if(this.isPossibleEatingToDiagonals(new Coordinate(i,j))) coordinatesToRemove.add(new Coordinate(i,j));
+        List<Coordinate> turnColorCoordinates = this.getCoordinatesWithActualColor();
+        for(Coordinate coordinate: turnColorCoordinates ){
+            if(this.isPossibleEatingToDiagonals(coordinate))
+                coordinatesToRemove.add(coordinate);
+        }
         return coordinatesToRemove;
     }
     private boolean isPossibleEatingToDiagonals(Coordinate coordinate) {
